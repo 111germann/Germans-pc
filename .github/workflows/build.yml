@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Unzip project
+        run: unzip -q GermansPC.zip
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -18,8 +20,9 @@ jobs:
       - name: Accept SDK licenses
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
       - name: Build debug APK
-        run: gradle assembleDebug --stacktrace
+        working-directory: GermansPC
+        run: gradle assembleDebug --console=plain
       - uses: actions/upload-artifact@v4
         with:
           name: GermansPC-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: GermansPC/app/build/outputs/apk/debug/*.apk
